@@ -6,6 +6,8 @@
  *
  * Assuming climbing 0 steps is one way
  * Param n: n is the number of steps in the staircase
+ *
+ * This method can calculate values for n=36 steps, after that overflow occurs due to int limitation
  */
 int tripleStepOrdered(int n){
 
@@ -22,7 +24,7 @@ int tripleStepOrdered(int n){
         return cache[n];
     }else{
         if(cache[n] == 0){
-            cache[n] = tripleStepOrdered(n-3) + tripleStepOrdered(n-2) + tripleStepOrdered(n-1);
+            cache[n] = tripleStepOrdered(n-1) + tripleStepOrdered(n-2) + tripleStepOrdered(n-3);
         }
         return cache[n];
     }
