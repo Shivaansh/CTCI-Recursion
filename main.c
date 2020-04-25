@@ -1,4 +1,6 @@
 #include <stdio.h>
+//#include <w32api/vss.h>
+#include <stdbool.h>
 
 /* Problem 8.1
  * Triple Step: A child is running up a staircase with n steps and can hop either 1 step, 2 steps or 3 steps
@@ -24,7 +26,7 @@ int tripleStepOrdered(int n){
         return cache[n];
     }else{
         if(cache[n] == 0){
-            cache[n] = tripleStepOrdered(n-1) + tripleStepOrdered(n-2) + tripleStepOrdered(n-3);
+            cache[n] = tripleStepOrdered(n-3) + tripleStepOrdered(n-2) + tripleStepOrdered(n-1);
         }
         return cache[n];
     }
@@ -38,28 +40,45 @@ int tripleStepOrdered(int n){
  *
  * Param r: r is the number of rows in grid
  * Param c: c is the number of columns in grid
+ * Param path: array of type Point to store path
  *
- * //TODO: Add way to omit "off limits" cells
- * //TODO: Add memoization to reduce number of recursive calls
+ * Struct Point: Struct to create a Point entity
  */
-int robotInGrid(int r, int c){
+struct Point{
+    int r;
+    int c;
+    int exists;
+};
 
-    //static int cache[50][50] = {0}{0};
-    if(r < 0 || c < 0){
-        return 0;
+//helper
+void appendToPath(struct Point pnt, struct Point array[]){
+    int i = 0;
+    while(array[i].exists == 1){
+        i++;
     }
-    if(r == 0 || c == 0){
-        if(r == c){
-            return 0;
-        }else{
-            return 1;
-        }
-    }else{
-        return robotInGrid(r-1, c) + robotInGrid(r, c-1);
-    }
-
+    array[i] = pnt;
 }
 
+bool robotInGrid(int r, int c, struct Point path[]){
+
+    bool isAtOrigin = ((r == 0) && (c == 0));
+
+    if(r == -1 || c == -1){
+        struct Point p = {r, c, 1};
+        return false;
+    }
+
+    if(isAtOrigin || robotInGrid(r-1, c, path) || robotInGrid(r, c-1, path)){
+        struct Point p = {r, c, 1};
+        appendToPath(p, path);
+        return true;
+    }
+    return true;
+}
+
+
+
+// MAIN FUNCTION: WRITE ALL CODE BEFORE printf(" (%d, %d) ->", )
 int main() {
     //Problem 8.1: Triple step
     printf("Problem 8.1: Triple Step\n");
@@ -71,7 +90,17 @@ int main() {
     printf("************************\n");
     printf("\n");
 
-    printf("%d\n", robotInGrid(1, 2));
+    //Problem 8.2: Robot in a grid
+    printf("Problem 8.2: Robot in a grid\n");
+    static struct Point path1[50];
+    robotInGrid(2, 3, path1);
+    int i = 0;
+    while(path1[i].exists == 1){
+        printf("(%d, %d) -> ", path1[i].r, path1[i].c);
+        i++;
+    }
+    printf("\n************************\n");
+    printf("\n");
 
     return 0;
 }
