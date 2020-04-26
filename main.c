@@ -64,7 +64,7 @@ bool robotInGrid(int r, int c, struct Point path[]){
     bool isAtOrigin = ((r == 0) && (c == 0));
 
     if(r == -1 || c == -1){
-        struct Point p = {r, c, 1};
+        struct Point p = {r, c, 0};
         return false;
     }
 
