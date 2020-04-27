@@ -82,16 +82,17 @@ bool robotInGrid(int r, int c, struct Point path[]){
  * array A. What if the values are not distinct?
  *
  * Param arr: Sorted array of integers
- * Param n: Size of array arr
+ * Param size: Size of array arr
  *
  * BRUTE FORCE IMPLEMENTATION
  */
-void magicIndex(int arr[], int n){
+void magicIndex(int arr[], int size){
     static int index = -1;
-    int m = n-1;
+    int m = size-1;
 
     if(m == 0 && arr[m] != m){
         printf("No magic index!\n");
+        return;
     }
     if(m == 0 && arr[m] == m){
         printf("Magic index is %d\n", m);
@@ -101,6 +102,46 @@ void magicIndex(int arr[], int n){
         printf("Magic index is %d\n", m);
     }else{
         magicIndex(arr, m);
+    }
+}
+
+/*
+ * OPTIMIZED IMPLEMENTATION: Using binary search as array is sorted
+ *
+ * Param arr: Sorted array of integers
+ * Param low: left end of array to search
+ * Param high: right end of array to search
+ */
+int magicIndexOptimized(int arr[], int low, int high){
+    int mid = high + low / 2;
+    static int index = -1;
+
+    if(arr[mid] == mid){
+        index = mid;
+        printf("Magic index is %d\n", index);
+        return index;
+    }
+    if(high == low){
+        if(arr[mid] == mid){
+            index = mid;
+            printf("Magic index is %d\n", index);
+            return index;
+        }else{
+            printf("No magic index!\n");
+            return -1;
+        }
+    }
+    if(arr[mid] > mid){
+        //search left
+        high = mid-1;
+        index = magicIndexOptimized(arr, low, high);
+        return index;
+    }
+    if(arr[mid] < mid){
+        //search right
+        low = mid+1;
+        index = magicIndexOptimized(arr, low, high);
+        return index;
     }
 }
 
@@ -132,16 +173,18 @@ int main() {
     printf("Problem 8.3: Magic Index\n");
     int arr1[5] = {1, 2, 3, 3, 5};
     magicIndex(arr1, 5);
+    magicIndexOptimized(arr1, 0, 4);
 
     int arr2[7] = {1, 2, 3, 3, 5, 5, 6};
     magicIndex(arr2, 7);
+    magicIndexOptimized(arr2, 0, 6);
 
     int arr3[7] = {100, 200, 300, 300, 500, 500, 600};
     magicIndex(arr3, 7);
+    magicIndexOptimized(arr3, 0, 6);
+
     printf("************************\n");
     printf("\n");
-
-
 
     return 0;
 }
