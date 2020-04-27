@@ -76,7 +76,33 @@ bool robotInGrid(int r, int c, struct Point path[]){
     return true;
 }
 
+/* Problem 8.3
+ * Magic index: A magic index in an array A[0...n-1] is defined ot be an index such that A[i] = i.
+ * Given a sorted array of distinct integers, write a method to find a magic index, if one exists, in
+ * array A. What if the values are not distinct?
+ *
+ * Param arr: Sorted array of integers
+ * Param n: Size of array arr
+ *
+ * BRUTE FORCE IMPLEMENTATION
+ */
+void magicIndex(int arr[], int n){
+    static int index = -1;
+    int m = n-1;
 
+    if(m == 0 && arr[m] != m){
+        printf("No magic index!\n");
+    }
+    if(m == 0 && arr[m] == m){
+        printf("Magic index is %d\n", m);
+    }
+    if(arr[m] == m){
+        index = m;
+        printf("Magic index is %d\n", m);
+    }else{
+        magicIndex(arr, m);
+    }
+}
 
 // MAIN FUNCTION: WRITE ALL CODE BEFORE printf(" (%d, %d) ->", )
 int main() {
@@ -101,6 +127,21 @@ int main() {
     }
     printf("\n************************\n");
     printf("\n");
+
+    //Problem 8.3: Magic Index
+    printf("Problem 8.3: Magic Index\n");
+    int arr1[5] = {1, 2, 3, 3, 5};
+    magicIndex(arr1, 5);
+
+    int arr2[7] = {1, 2, 3, 3, 5, 5, 6};
+    magicIndex(arr2, 7);
+
+    int arr3[7] = {100, 200, 300, 300, 500, 500, 600};
+    magicIndex(arr3, 7);
+    printf("************************\n");
+    printf("\n");
+
+
 
     return 0;
 }
